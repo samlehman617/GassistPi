@@ -27,28 +27,12 @@ fi
 
 sudo apt-get update -y
 
-if ps ax | grep -v grep | grep gassistpi-ok-google > /dev/null
+if ps ax | grep -v grep | grep gassistpi > /dev/null
 then
-    echo "Google Assistant Voice Service is running, stopping it for updating the project"
-    sudo systemctl stop gassistpi-ok-google.service
+    echo "==========Google Assistant Voice Service is running, stopping it for updating the project=========="
+    sudo systemctl stop gassistpi.service
 else
-    echo "Service is not running, proceeding to update"
-fi
-
-if ps ax | grep -v grep | grep gassistpi-push-button > /dev/null
-then
-    echo "Google Assistant Pushbutton Service is running, stopping it for updating the project"
-    sudo systemctl stop gassistpi-push-button.service
-else
-    echo "Service is not running, proceeding to update"
-fi
-
-if ps ax | grep -v grep | grep stopbutton > /dev/null
-then
-    echo "Stopbutton Service is running, stopping it for updating the project"
-    sudo systemctl stop stopbutton.service
-else
-    echo "Service is not running, proceeding to update"
+    echo "==========Service is not running, proceeding to update the project=========="
 fi
 
 sudo mv /home/pi/GassistPi /home/pi/GassistPi.bak-$(date +%F)
@@ -59,25 +43,9 @@ cd /home/pi/
 
 sed 's/#.*//' /home/pi/GassistPi/Requirements/GassistPi-system-requirements.txt | xargs sudo apt-get install -y
 
-if [ ! -d /home/pi/.config/mpv/scripts/ ]; then
-  mkdir -p /home/pi/.config/mpv/scripts/
-fi
-
-if [ -f /home/pi/GassistPi/src/end.lua ]; then
-  mv /home/pi/GassistPi/src/end.lua /home/pi/.config/mpv/scripts/end.lua
-fi
-
-if [ -f /home/pi/GassistPi/src/mpv.conf ]; then
-  mv /home/pi/GassistPi/src/mpv.conf /home/pi/.config/mpv/mpv.conf
-fi
-
-
-python3 -m venv env
-env/bin/python -m pip install --upgrade pip setuptools wheel
 source env/bin/activate
 
 pip install -r /home/pi/GassistPi/Requirements/GassistPi-pip-requirements.txt
-clear
 echo ""
 echo ""
-echo "Finished updating the project. Please restart the Pi"
+echo "==========Finished updating the project. Please restart the Pi=========="
